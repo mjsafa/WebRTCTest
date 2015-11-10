@@ -1,0 +1,8 @@
+{
+  "name": "WebRTC-test",
+  "description": "Example project for tutorial on Bower for Tuts+",
+  "version": "1.0.0",
+  "dependencies": {
+    "jquery": "~2.1.4"
+  }
+}
