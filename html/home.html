@@ -3,19 +3,53 @@
 <head lang="en">
     <meta charset="UTF-8">
     <title>WebRTC TEST</title>
-    <script src="http://cdn.peerjs.com/0.3/peer.js"></script>
-    <script src="/bower_components/jquery/dist/jquery.min.js"></script>
+    <script src="../bower_components/jquery/dist/jquery.min.js"></script>
+    <script src="../bower_components/peerjs/peer.js"></script>
 </head>
 <body>
 
 <script type="text/javascript">
+    var peer = peer || {};
     function init(id){
-        var peer = new Peer(id, {key: 'peerjs'});
+        console.log('registering with name: ' + id);
+        peer = new Peer(id, {
+            host: 'localhost',
+            port: 9000
+        });
+
+        peer.on('connection', function(conn) {
+            conn.on('data', function(data){
+                alert(data);
+            });
+        });
     }
 
+    jQuery(function(){
+        jQuery('#submitBtn').on('click', function(){
+            init(jQuery('#peerId').val());
+        });
+
+
+        jQuery('#connectBtn').on('click', function(){
+            var conn = peer.connect(jQuery('#connectTo').val());
+            conn.on('open', function(){
+                conn.send(jQuery('#text').val());
+            });
+        });
+    });
 </script>
 
-<h1>enter your name:</h1>
+<h1>my key:</h1>
 <input type="text" id="peerId"/>
+<input value="register" type="button" id="submitBtn"/>
+<br/>
+
+<br/>
+<h1>recepient:</h1>
+<input type="text" id="connectTo"/>
+<h1>text:</h1>
+<textarea id="text"></textarea>
+<input value="connect to peer" type="button" id="connectBtn"/>
+
 </body>
 </html>
